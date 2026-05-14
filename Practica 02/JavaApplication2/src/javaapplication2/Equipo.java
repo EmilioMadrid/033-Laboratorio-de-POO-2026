@@ -14,7 +14,7 @@ public class Equipo {
     public void agregarFutbolista(Futbolista f) {
         if (f != null) {
             listaFutbolistas.add(f);
-            System.out.println(f.getNombre() + " ha sido fichado por " + nombreEquipo);
+            System.out.println(f.getNombre() + " ha sido añadido a la lista de futbolistas");
         } else {
             System.out.println("No se puede agregar un jugador inexistente.");
         }

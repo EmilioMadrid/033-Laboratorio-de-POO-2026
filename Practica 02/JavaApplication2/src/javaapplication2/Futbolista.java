@@ -20,7 +20,11 @@ public class Futbolista {
     }
 
     public Futbolista() {
-        this("Desconocido", 0, 0.0, "Agente libre", "N/A");
+        this.nombre = "Desconocido";
+        this.edad = 0;
+        this.estatura = 0.0;
+        this.club = "Agente libre";
+        this.pais = "N/A";
     }
 
     public String getNombre() {
