@@ -5,7 +5,7 @@ public class Contrato {
     private int vigenciaMeses;
     protected String tipoContrato;
 
-    public Contrato(double salario, int vigencia, double clausula, String tipoContrato) {
+    public Contrato(double salario, int vigencia, String tipoContrato) {
         setSalarioMensual(salario);
         setVigenciaMeses(vigencia);
         this.tipoContrato = tipoContrato;
