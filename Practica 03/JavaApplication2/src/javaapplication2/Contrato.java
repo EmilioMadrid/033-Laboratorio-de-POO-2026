@@ -22,7 +22,7 @@ public class Contrato {
             this.salarioMensual = salarioMensual;
         else {
             this.salarioMensual = 0;
-            System.out.println("Salario invalido, 0 asignado por defecto");
+            System.out.println("Salario invalido, $0.00 asignado por defecto");
         }
     }
 

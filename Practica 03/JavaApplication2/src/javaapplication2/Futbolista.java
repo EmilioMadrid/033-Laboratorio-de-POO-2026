@@ -118,14 +118,22 @@ public class Futbolista {
             System.out.println("El aumento de valor de mercado no puede exceder el 50%");
         }
     }
+
+    public Contrato getContrato() {
+        return contrato;
+    }
+
+    public void setContrato(Contrato contrato) {
+        this.contrato = contrato;
+    }
     
     @Override 
     public String toString(){
         if(contrato == null)
-            return "Nombre: " + nombre + " | Edad: " + edad + " | Estatura: " + estatura + " | Club: " + club + " | Pais: " + pais + " | Valor de mercado: " + valorMercado +
-               "Sin contrato activo";
+            return "Nombre: " + nombre + " | Edad: " + edad + " | Estatura: " + estatura + " | Club: " + club + " | Pais: " + pais + " | Valor de mercado: $" + valorMercado +
+               " | Sin contrato activo";
         else
-            return "Nombre: " + nombre + " | Edad: " + edad + " | Estatura: " + estatura + " | Club: " + club + " | Pais: " + pais + " | Valor de mercado: " + valorMercado +
-               "Datos de contrato: " + contrato;
+            return "Nombre: " + nombre + " | Edad: " + edad + " | Estatura: " + estatura + " | Club: " + club + " | Pais: " + pais + " | Valor de mercado: $" + valorMercado +
+               " | Datos de contrato: " + contrato;
     }
 }
