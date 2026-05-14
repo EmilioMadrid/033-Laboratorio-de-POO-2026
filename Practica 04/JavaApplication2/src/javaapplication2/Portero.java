@@ -11,8 +11,18 @@ public class Portero extends IntegranteClub{
 
     @Override
     public void mostrarInformacion() {
-        super.mostrarInformacion();
+        
         System.out.println("Posición: Portero | Atajadas: " + atajadas + "Porterias en cero: " + porteriasImbatidas);
+    }
+    
+    @Override
+    public void realizarAccion() {
+        System.out.println("Ha realizado una atajada");
+    }
+
+    @Override
+    public void trabajar() {
+        System.out.println("Está entrenando coordinacion y reflejos");
     }
     
 }

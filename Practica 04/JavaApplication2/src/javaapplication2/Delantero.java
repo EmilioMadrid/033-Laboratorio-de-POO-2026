@@ -11,8 +11,18 @@ public class Delantero extends IntegranteClub {
 
     @Override
     public void mostrarInformacion() {
-        super.mostrarInformacion();
+        
         System.out.println(" | Rol: Delantero | Goles: " + goles);
+    }
+    
+    @Override
+    public void realizarAccion() {
+        System.out.println("Ha marcado un gol");
+    }
+
+    @Override
+    public void trabajar() {
+        System.out.println("Está entrenando remates de cabeza");
     }
 
 }

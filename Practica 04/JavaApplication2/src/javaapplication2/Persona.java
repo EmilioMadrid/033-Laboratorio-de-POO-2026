@@ -39,4 +39,12 @@ public class Persona {
         System.out.println("Nombre: " + nombre + " | Edad: " + edad);
     }
     
+    public void realizarAccion() {
+        System.out.println(nombre + " está realizando una actividad.");
+    }
+    
+    public void trabajar() {
+        System.out.println(nombre + " está trabajando.");
+    }
+    
 }

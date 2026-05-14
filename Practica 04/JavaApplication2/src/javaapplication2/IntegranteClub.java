@@ -27,8 +27,18 @@ public class IntegranteClub extends Persona{
     
     @Override
     public void mostrarInformacion() {
-        super.mostrarInformacion();
+        
         System.out.println("Club: " + club + " | Contrato: [" + contrato + "]");
+    }
+    
+    @Override
+    public void realizarAccion() {
+        System.out.println("Está realizando una accion en las instalaciones de " + club);
+    }
+
+    @Override
+    public void trabajar() {
+        System.out.println("Está cumpliendo con sus obligaciones en " + club);
     }
     
 }
