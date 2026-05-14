@@ -4,7 +4,8 @@ public class IntegranteClub extends Persona{
     private String club;
     private Contrato contrato;
     
-    public IntegranteClub(String club, Contrato contrato) {
+    public IntegranteClub(String nombre, int edad, String pais, String club, Contrato contrato) {
+        super(nombre, edad, pais);
         this.club = club;
         this.contrato = contrato;
     }
@@ -27,7 +28,7 @@ public class IntegranteClub extends Persona{
     
     @Override
     public void mostrarInformacion() {
-        
+        super.mostrarInformacion();
         System.out.println("Club: " + club + " | Contrato: [" + contrato + "]");
     }
     
