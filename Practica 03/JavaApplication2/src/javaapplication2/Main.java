@@ -20,7 +20,5 @@ public class Main {
         miEquipo.agregarFutbolista(f3);
         miEquipo.agregarFutbolista(f4);
         miEquipo.agregarFutbolista(f5);
-
-        miEquipo.mostrarPlantilla();
     }
 }

@@ -20,11 +20,6 @@ public class Equipo {
         }
     }
 
-    public void mostrarPlantilla() {
-        for (Futbolista f : listaFutbolistas) {
-        }
-    }
-
     public Futbolista buscarPorNombre(String nombreBusqueda) {
         for (Futbolista f : listaFutbolistas) {
             if (f.getNombre().equalsIgnoreCase(nombreBusqueda)) {

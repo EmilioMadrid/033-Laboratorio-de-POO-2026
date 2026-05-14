@@ -7,22 +7,24 @@ public class Futbolista {
     private String club;
     private String pais;
     private double valorMercado;
+    private Contrato contrato;
     
-    public Futbolista(String nombre, int edad, double estatura, String club, String pais, double valorMercado) {
+    public Futbolista(String nombre, int edad, double estatura, String club, String pais, double valor, Contrato contrato) {
         this.nombre = nombre;
         setEdad(edad);
         setEstatura(estatura);
         this.club = club;
         this.pais = pais;
-        this.valorMercado = valorMercado;
+        this.valorMercado = valor;
+        this.contrato = contrato;
     }
     
     public Futbolista(String nombre, int edad, double estatura, String pais, double valorMercado) {
-        this(nombre, edad, estatura, "Angente libre", pais, valorMercado);
+        this(nombre, edad, estatura, "Angente libre", pais, valorMercado, null);
     }
 
     public Futbolista() {
-        this("Desconocido", 14, 1.20, "Angente libre", "N/A", 0.0);
+        this("Desconocido", 14, 1.20, "Angente libre", "N/A", 0.0, null);
     }
 
     public String getNombre() {
@@ -79,15 +81,14 @@ public class Futbolista {
         return valorMercado;
     }
 
-    public void setValorMercado(double nuevoValor) {
-    double limiteMaximo = this.valorMercado * 1.5;
-    
-    if (this.valorMercado == 0 || nuevoValor <= limiteMaximo) {
-        this.valorMercado = nuevoValor;
-    } else {
-        System.out.println("El aumento de valor de mercado no puede exceder el 50%");
+    public void setValorMercado(double valor) {
+        if (valor >= 0.0 && valor <= 500000000)
+            this.valorMercado = valor;
+        else {
+            this.valorMercado = 0.0;
+            System.out.println("Valor invalido, $0.00 asignado por defecto");
+        }
     }
-}
     
     public void traspaso(String nuevoClub){
         this.club = nuevoClub;
@@ -108,7 +109,23 @@ public class Futbolista {
         this.pais += ", " +nuevaNacionalidad;
     }
     
-    @Override public String toString(){
-        return "Nombre: " + nombre + " | Edad: " + edad + " | Estatura: " + estatura + " | Club: " + club + " | Pais: " + pais + " | Valor de mercado: " + valorMercado;
+    public void actualizarValorMercado(double nuevoValor) {
+        double limiteMaximo = this.valorMercado * 1.5;
+    
+        if (this.valorMercado >= 0 && nuevoValor <= limiteMaximo) {
+            this.valorMercado = nuevoValor;
+        } else {
+            System.out.println("El aumento de valor de mercado no puede exceder el 50%");
+        }
+    }
+    
+    @Override 
+    public String toString(){
+        if(contrato == null)
+            return "Nombre: " + nombre + " | Edad: " + edad + " | Estatura: " + estatura + " | Club: " + club + " | Pais: " + pais + " | Valor de mercado: " + valorMercado +
+               "Sin contrato activo";
+        else
+            return "Nombre: " + nombre + " | Edad: " + edad + " | Estatura: " + estatura + " | Club: " + club + " | Pais: " + pais + " | Valor de mercado: " + valorMercado +
+               "Datos de contrato: " + contrato;
     }
 }
