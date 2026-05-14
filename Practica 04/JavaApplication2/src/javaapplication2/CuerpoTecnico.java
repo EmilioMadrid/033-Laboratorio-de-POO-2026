@@ -16,11 +16,11 @@ public class CuerpoTecnico extends IntegranteClub {
 
     @Override
     public void realizarAccion() {
-        System.out.println("Está dando indicaciones al equipo");
+        System.out.println(getNombre() + " está dando indicaciones al equipo");
     }
 
     @Override
     public void trabajar() {
-        System.out.println("Está planteando tacticas previas al partido");
+        System.out.println(getNombre() + " está planteando tacticas previas al partido");
     }
 }

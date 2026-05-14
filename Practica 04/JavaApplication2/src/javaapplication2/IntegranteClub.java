@@ -34,12 +34,12 @@ public class IntegranteClub extends Persona{
     
     @Override
     public void realizarAccion() {
-        System.out.println("Está realizando una accion en las instalaciones de " + club);
+        System.out.println(getNombre() + " está realizando una accion en las instalaciones de " + club);
     }
 
     @Override
     public void trabajar() {
-        System.out.println("Está cumpliendo con sus obligaciones en " + club);
+        System.out.println(getNombre() + " está cumpliendo con sus obligaciones en " + club);
     }
     
 }

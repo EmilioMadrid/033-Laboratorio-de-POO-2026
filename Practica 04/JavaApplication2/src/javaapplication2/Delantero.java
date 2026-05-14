@@ -18,12 +18,12 @@ public class Delantero extends IntegranteClub {
     
     @Override
     public void realizarAccion() {
-        System.out.println("Ha marcado un gol");
+        System.out.println(getNombre() + " ha marcado un gol");
     }
 
     @Override
     public void trabajar() {
-        System.out.println("Está entrenando remates de cabeza");
+        System.out.println(getNombre() + " está entrenando remates de cabeza");
     }
 
 }
