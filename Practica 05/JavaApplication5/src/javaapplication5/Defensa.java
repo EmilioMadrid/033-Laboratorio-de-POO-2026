@@ -28,4 +28,15 @@ public class Defensa extends Deportista {
         System.out.println(nombre + " está barriéndose para recuperar la posesión.");
     }
 
+    public void entrenar() {
+        System.out.println(nombre + " hace ejercicios de marca personal.");
+    }
+
+    public void entrenar(double distanciaKm) {
+        System.out.println(nombre + " recorre " + distanciaKm + " km para mejorar resistencia.");
+    }
+
+    public void entrenar(int obstaculos, String velocidad) {
+        System.out.println(nombre + " esquiva " + obstaculos + " conos a velocidad " + velocidad);
+    }
 }

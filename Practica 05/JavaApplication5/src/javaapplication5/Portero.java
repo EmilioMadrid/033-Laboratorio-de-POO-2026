@@ -28,4 +28,15 @@ public class Portero extends Deportista {
         System.out.println(nombre + " realizó una atajada.");
     }
 
+    public void entrenar() {
+        System.out.println(nombre + " entrena reflejos básicos.");
+    }
+
+    public void entrenar(int disparos) {
+        System.out.println(nombre + " entrena deteniendo " + disparos + " disparos directos.");
+    }
+
+    public void entrenar(String intensidad, int duracionMinutos) {
+        System.out.println(nombre + " entrena a intensidad " + intensidad + " durante " + duracionMinutos + " min.");
+    }
 }
