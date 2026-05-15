@@ -1,7 +1,7 @@
 package javaapplication5;
 
 public interface ICalculable {
-    double calcularBonoExtra(double sueldoBase);
+    double calcularBonoExtra();
     
-    double calcularSueldoNeto();
+    double calcularSueldoNeto(double sueldoBase);
 }
