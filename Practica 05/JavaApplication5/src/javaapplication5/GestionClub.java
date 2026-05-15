@@ -17,7 +17,7 @@ public class GestionClub {
     }
 
     public void avanzarJornada() {
-        System.out.println("\n Iniciando jornada");
+        System.out.println("\nIniciando jornada");
         for (Deportista d : listaDeportistas) {
             d.getPosicion();
             d.realizarAccion();
