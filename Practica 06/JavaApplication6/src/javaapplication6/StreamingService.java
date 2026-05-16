@@ -3,6 +3,8 @@ package javaapplication6;
 import java.util.ArrayList;
 import java.util.logging.Logger;
 import java.util.logging.Level;
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class StreamingService {
     private static final Logger logger = Logger.getLogger(StreamingService.class.getName());
@@ -41,11 +43,21 @@ public class StreamingService {
         if (contenido instanceof IVendible && !esUsuarioPremium) {
             String msgError = "El usuario actual no tiene una suscripción válida para descargar: " + contenido.titulo;
             logger.log(Level.WARNING, "Intento de descarga no autorizado: {0}", msgError);
-            
             throw new AccesoNoAutorizadoException(msgError);
         }
         
-        System.out.println("Descarga completada con éxito para: " + contenido.titulo);
+        try (FileWriter writer = new FileWriter("reporte_descargas.txt", true)) {
+            
+            String registro = String.format("DESCARGA -> ID: %s | Título: %s | Tipo: %s\n", 
+                    contenido.id, contenido.titulo, contenido.getTipo());
+            
+            writer.write(registro);
+            
+            System.out.println("Sistema: Datos de '" + contenido.titulo + "' respaldados en reporte_descargas.txt de forma segura.");
+
+        } catch (IOException e) {
+            logger.log(Level.SEVERE, "Fallo crítico de E/S al escribir el reporte de descargas para: " + contenido.titulo, e);
+        }
     }
 
     public void validarMetadatosAudio(ContenidoAudio contenido) throws FormatoAudioException {
