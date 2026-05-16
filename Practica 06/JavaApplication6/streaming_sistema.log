@@ -1,0 +1,36 @@
+may 15, 2026 8:28:41 P. M. javaapplication6.StreamingService buscarPorId
+INFO: Iniciando búsqueda de contenido con ID: C-909
+may 15, 2026 8:28:41 P. M. javaapplication6.StreamingService buscarPorId
+SEVERE: Fallo en búsqueda: El ID 'C-909' no corresponde a ningún elemento en el sistema.
+may 15, 2026 8:28:41 P. M. javaapplication6.StreamingService agregarContenido
+INFO: Contenido agregado exitosamente: Nightcall
+may 15, 2026 8:28:41 P. M. javaapplication6.StreamingService procesarDescarga
+INFO: Procesando solicitud de descarga para: Nightcall
+may 15, 2026 8:28:41 P. M. javaapplication6.StreamingService procesarDescarga
+WARNING: Intento de descarga no autorizado: El usuario actual no tiene una suscripción válida para descargar: Nightcall
+may 15, 2026 8:28:41 P. M. javaapplication6.StreamingService procesarDescarga
+INFO: Procesando solicitud de descarga para: Nightcall
+may 15, 2026 8:29:47 P. M. javaapplication6.StreamingService buscarPorId
+INFO: Iniciando búsqueda de contenido con ID: C-909
+may 15, 2026 8:29:47 P. M. javaapplication6.StreamingService buscarPorId
+SEVERE: Fallo en búsqueda: El ID 'C-909' no corresponde a ningún elemento en el sistema.
+may 15, 2026 8:29:47 P. M. javaapplication6.StreamingService agregarContenido
+INFO: Contenido agregado exitosamente: Nightcall
+may 15, 2026 8:29:47 P. M. javaapplication6.StreamingService procesarDescarga
+INFO: Procesando solicitud de descarga para: Nightcall
+may 15, 2026 8:29:47 P. M. javaapplication6.StreamingService procesarDescarga
+WARNING: Intento de descarga no autorizado: El usuario actual no tiene una suscripción válida para descargar: Nightcall
+may 15, 2026 8:29:47 P. M. javaapplication6.StreamingService procesarDescarga
+INFO: Procesando solicitud de descarga para: Nightcall
+may 15, 2026 8:32:55 P. M. javaapplication6.StreamingService buscarPorId
+INFO: Iniciando búsqueda de contenido con ID: C-909
+may 15, 2026 8:32:55 P. M. javaapplication6.StreamingService buscarPorId
+SEVERE: Fallo en búsqueda: El ID 'C-909' no corresponde a ningún elemento en el sistema.
+may 15, 2026 8:32:55 P. M. javaapplication6.StreamingService agregarContenido
+INFO: Contenido agregado exitosamente: Nightcall
+may 15, 2026 8:32:55 P. M. javaapplication6.StreamingService procesarDescarga
+INFO: Procesando solicitud de descarga para: Nightcall
+may 15, 2026 8:32:55 P. M. javaapplication6.StreamingService procesarDescarga
+WARNING: Intento de descarga no autorizado: El usuario actual no tiene una suscripción válida para descargar: Nightcall
+may 15, 2026 8:32:55 P. M. javaapplication6.StreamingService procesarDescarga
+INFO: Procesando solicitud de descarga para: Nightcall
