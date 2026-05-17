@@ -23,6 +23,18 @@ public abstract class Videojuego implements Comparable<Videojuego> {
     public double getPrecio() { return precio; }
     public double getCalificacion() { return calificacion; }
 
+    public void setPrecio(double precio) {
+        if (precio >= 0) {
+            this.precio = precio;
+        }
+    }
+
+    public void setCalificacion(double calificacion) {
+        if (calificacion >= 0 && calificacion <= 100) {
+            this.calificacion = calificacion;
+        }
+    }
+
     public abstract String getGenero();
     public abstract void mostrarFichaTecnica();
 
@@ -33,10 +45,10 @@ public abstract class Videojuego implements Comparable<Videojuego> {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj) return true; // Optimización por referencia idéntica
-        if (obj == null || getClass() != obj.getClass()) return false; // Validación de tipo
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
         Videojuego other = (Videojuego) obj;
-        return Objects.equals(id, other.id); // Comparación del identificador único
+        return Objects.equals(id, other.id);
     }
 
     @Override
