@@ -25,7 +25,7 @@ public class ExpansionDLC extends Videojuego {
 
     @Override
     public void mostrarFichaTecnica() {
-        System.out.println("\t\tCONTENIDO DESCARGABLE (DLC)");
+        System.out.println("\tCONTENIDO DESCARGABLE (DLC)");
         System.out.println("ID: " + id);
         System.out.println("Título: " + titulo);
         System.out.println("Desarrollador: " + desarrollador);
@@ -33,5 +33,6 @@ public class ExpansionDLC extends Videojuego {
         System.out.println("Es estético/cosmético: " + (esCosmetico ? "Sí" : "No"));
         System.out.println("Precio: $" + precio);
         System.out.println("Calificación: " + calificacion + "/100");
+        System.out.println("--------------------------------------");
     }
 }

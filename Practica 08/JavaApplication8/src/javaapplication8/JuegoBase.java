@@ -29,5 +29,6 @@ public class JuegoBase extends Videojuego {
         System.out.println("Tamaño: " + tamanoGigas + " GB");
         System.out.println("Precio: $" + precio);
         System.out.println("Calificación: " + calificacion + "/100");
+        System.out.println("--------------------------------------");
     }
 }

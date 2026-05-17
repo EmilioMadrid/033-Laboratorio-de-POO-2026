@@ -5,9 +5,12 @@ import java.util.List;
 import java.util.Scanner;
 
 public class JavaApplication8 {
-
+    
     public static void main(String[] args) {
         TiendaVideojuegos tienda = new TiendaVideojuegos();
+        
+        precargarDatos(tienda);
+        
         Scanner scanner = new Scanner(System.in);
         int opcion = 0;
 
@@ -195,5 +198,44 @@ public class JavaApplication8 {
         } while (opcion != 13);
 
         scanner.close();
+    }
+    
+    private static void precargarDatos(TiendaVideojuegos tienda) {
+    Videojuego j1 = new JuegoBase("JB-01", "The Witcher 3", "CD Projekt Red", 39.99, 93.0, "RPG", 50.0);
+    Videojuego j2 = new JuegoBase("JB-02", "Cyberpunk 2077", "CD Projekt Red", 59.99, 86.0, "RPG", 70.0);
+    Videojuego j3 = new JuegoBase("JB-03", "Elden Ring", "FromSoftware", 59.99, 96.0, "Action RPG", 60.0);
+    Videojuego j4 = new JuegoBase("JB-04", "Hades", "Supergiant Games", 24.99, 93.0, "Roguelike", 15.0);
+    Videojuego j5 = new JuegoBase("JB-05", "Doom Eternal", "id Software", 19.99, 88.0, "FPS", 80.0);
+    Videojuego j6 = new JuegoBase("JB-06", "Hollow Knight", "Team Cherry", 14.99, 90.0, "Metroidvania", 9.0);
+    Videojuego j7 = new JuegoBase("JB-07", "Red Dead Redemption 2", "Rockstar Games", 59.99, 97.0, "Accion", 120.0);
+    Videojuego j8 = new JuegoBase("JB-08", "Grand Theft Auto V", "Rockstar Games", 29.99, 96.0, "Accion", 100.0);
+    Videojuego j9 = new JuegoBase("JB-09", "Minecraft", "Mojang", 26.95, 93.0, "Sandbox", 4.0);
+    Videojuego j10 = new JuegoBase("JB-10", "Stardew Valley", "ConcernedApe", 14.99, 89.0, "Simulacion", 2.0);
+
+    Videojuego d1 = new ExpansionDLC("DLC-01", "Blood and Wine", "CD Projekt Red", 19.99, 92.0, "JB-01", false);
+    Videojuego d2 = new ExpansionDLC("DLC-02", "Phantom Liberty", "CD Projekt Red", 29.99, 89.0, "JB-02", false);
+    Videojuego d3 = new ExpansionDLC("DLC-03", "Shadow of the Erdtree", "FromSoftware", 34.99, 95.0, "JB-03", false);
+    Videojuego d4 = new ExpansionDLC("DLC-04", "Doom Skin Pack", "id Software", 4.99, 60.0, "JB-05", true);
+    Videojuego d5 = new ExpansionDLC("DLC-05", "Stardew OST", "ConcernedApe", 4.99, 99.0, "JB-10", true);
+
+    tienda.agregarVideojuego(j1);
+    tienda.agregarVideojuego(j2);
+    tienda.agregarVideojuego(j3);
+    tienda.agregarVideojuego(j4);
+    tienda.agregarVideojuego(j5);
+    tienda.agregarVideojuego(j6);
+    tienda.agregarVideojuego(j7);
+    tienda.agregarVideojuego(j8);
+    tienda.agregarVideojuego(j9);
+    tienda.agregarVideojuego(j10);
+    tienda.agregarVideojuego(d1);
+    tienda.agregarVideojuego(d2);
+    tienda.agregarVideojuego(d3);
+    tienda.agregarVideojuego(d4);
+    tienda.agregarVideojuego(d5);
+
+    tienda.encolarDescarga(j3);
+    tienda.encolarDescarga(j6);
+    tienda.encolarDescarga(d2);
     }
 }
