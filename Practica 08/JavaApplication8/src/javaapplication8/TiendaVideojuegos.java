@@ -51,6 +51,15 @@ public class TiendaVideojuegos {
         return true;
     }
     
+    public void mostrarCatalogoOrdenado(java.util.Comparator<Videojuego> criterio) {
+        if (criterio == null) {
+            return;
+        }
+        catalogo.values().stream()
+                .sorted(criterio)
+                .forEach(Videojuego::mostrarFichaTecnica);
+    }
+    
     public java.util.List<Videojuego> filtrarPorGeneroYCalificacion(String genero, double calificacionMinima) {
         if (genero == null) {
             return new java.util.ArrayList<>();
@@ -84,10 +93,4 @@ public class TiendaVideojuegos {
         return colaDescargas.removeFirst();
     }
     
-    public void mostrarCatalogoOrdenado(java.util.Comparator<Videojuego> criterio) {
-        if (criterio == null) {
-            return;
-        }
-        catalogo.values().stream().sorted(criterio).forEach(Videojuego::mostrarFichaTecnica);
-    }
 }
