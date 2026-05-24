@@ -38,6 +38,9 @@ public class MainApp extends Application {
         if (clienteService != null) {
             clienteService.apagarServicio();
         }
+        if (claseService != null) {
+            claseService.apagarServicio();
+        }
     }
 
     public static void main(String[] args) {

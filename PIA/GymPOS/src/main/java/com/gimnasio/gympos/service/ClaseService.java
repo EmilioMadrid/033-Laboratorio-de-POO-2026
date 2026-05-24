@@ -2,32 +2,68 @@ package com.gimnasio.gympos.service;
 
 import com.gimnasio.gympos.exception.AccesoDenegadoException;
 import com.gimnasio.gympos.exception.ClaseLlenaException;
+import com.gimnasio.gympos.exception.ClienteYaInscritoException;
 import com.gimnasio.gympos.model.ClaseGrupal;
 import com.gimnasio.gympos.model.Cliente;
 import com.gimnasio.gympos.model.Reserva;
 import com.gimnasio.gympos.util.PersistenciaUtil;
 
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class ClaseService {
 
-    private final Map<String, ClaseGrupal> clases;
-    private final Map<String, Reserva> reservas;
+    private final String archivoDatos = "gimnasio_reservas.dat";
+    private Map<String, ClaseGrupal> clases;
+    private Map<String, Reserva> reservas;
+    private final ScheduledExecutorService hilosPersistencia;
 
     public ClaseService() {
         this.clases = new ConcurrentHashMap<>();
         this.reservas = new ConcurrentHashMap<>();
-        cargarDatosInicialesDemo();
+        this.hilosPersistencia = Executors.newSingleThreadScheduledExecutor();
+        
+        cargarDatosPermanentes();
+        
+        this.hilosPersistencia.scheduleWithFixedDelay(this::guardarDatosEnDisco, 5, 10, TimeUnit.SECONDS);
+    }
+
+    private void cargarDatosPermanentes() {
+        File file = new File(archivoDatos);
+        if (!file.exists()) {
+            cargarDatosInicialesDemo();
+            guardarDatosEnDisco();
+            return;
+        }
+
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file))) {
+            this.clases = (ConcurrentHashMap<String, ClaseGrupal>) ois.readObject();
+            this.reservas = (ConcurrentHashMap<String, Reserva>) ois.readObject();
+        } catch (Exception e) {
+            cargarDatosInicialesDemo();
+        }
+    }
+
+    private synchronized void guardarDatosEnDisco() {
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(archivoDatos))) {
+            oos.writeObject(clases);
+            oos.writeObject(reservas);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void cargarDatosInicialesDemo() {
-        clases.put("C01", new ClaseGrupal("C01", "Spinning", "Entrenador Alan", "08:00 AM", 2));
-        clases.put("C02", new ClaseGrupal("C02", "Yoga", "Entrenadora Sofia", "10:00 AM", 15));
-        clases.put("C03", new ClaseGrupal("C03", "Crossfit", "Entrenador Carlos", "07:00 PM", 1));
+        clases.put("C01", new ClaseGrupal("C01", "Spinning Intenso", "Entrenador Alan", "08:00 AM", 2));
+        clases.put("C02", new ClaseGrupal("C02", "Yoga Restaurativo", "Entrenadora Sofia", "10:00 AM", 15));
+        clases.put("C03", new ClaseGrupal("C03", "Crossfit Pro", "Entrenador Carlos", "07:00 PM", 1));
     }
 
     public List<ClaseGrupal> obtenerTodasLasClases() {
@@ -38,7 +74,7 @@ public class ClaseService {
         return new ArrayList<>(reservas.values());
     }
 
-    public void agendarReserva(Cliente cliente, String idClase) throws ClaseLlenaException, AccesoDenegadoException {
+    public void agendarReserva(Cliente cliente, String idClase) throws ClaseLlenaException, AccesoDenegadoException, ClienteYaInscritoException {
         if (cliente == null) {
             throw new IllegalArgumentException("El cliente no puede ser nulo.");
         }
@@ -52,6 +88,10 @@ public class ClaseService {
             throw new IllegalArgumentException("La clase grupal seleccionada no existe.");
         }
 
+        if (clase.getIdsClientesInscritos().contains(cliente.getIdCliente())) {
+            throw new ClienteYaInscritoException("Operación inválida: El socio " + cliente.getNombre() + " ya se encuentra inscrito en esta clase.");
+        }
+
         synchronized (clase) {
             if (clase.estaLlena()) {
                 throw new ClaseLlenaException("No se pudo agendar: La clase '" + clase.getNombre() + "' ha alcanzado su cupo máximo.");
@@ -62,6 +102,8 @@ public class ClaseService {
             String idReserva = "RES-" + UUID.randomUUID().toString().substring(0, 8).toUpperCase();
             Reserva nuevaReserva = new Reserva(idReserva, cliente.getIdCliente(), idClase);
             reservas.put(idReserva, nuevaReserva);
+            
+            hilosPersistencia.execute(this::guardarDatosEnDisco);
         }
     }
 
@@ -72,8 +114,21 @@ public class ClaseService {
             if (clase != null) {
                 synchronized (clase) {
                     clase.deDarBajaCliente(reserva.getIdCliente());
+                    hilosPersistencia.execute(this::guardarDatosEnDisco);
                 }
             }
+        }
+    }
+
+    public void apagarServicio() {
+        try {
+            guardarDatosEnDisco();
+            hilosPersistencia.shutdown();
+            if (!hilosPersistencia.awaitTermination(3, TimeUnit.SECONDS)) {
+                hilosPersistencia.shutdownNow();
+            }
+        } catch (InterruptedException e) {
+            hilosPersistencia.shutdownNow();
         }
     }
 }
