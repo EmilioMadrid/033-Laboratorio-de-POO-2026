@@ -1,45 +1,52 @@
 package com.gimnasio.gympos.core.main;
 
-import com.gimnasio.gympos.model.*;
-import com.gimnasio.gympos.core.util.ManagerPersistencia;
+import com.gimnasio.gympos.controller.ClientesController;
+import com.gimnasio.gympos.service.ClienteService;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import java.time.LocalDate;
 
 public class MainApp extends Application {
 
-    private static final String ARCHIVO_DATOS = "gimnasio_datos.dat";
-    private GimnasioData datosSistema;
+    private ClienteService clienteService;
+
+    @Override
+    public void init() {
+        clienteService = new ClienteService("gimnasio_datos.dat");
+    }
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        try {
-            datosSistema = ManagerPersistencia.cargarDatos(ARCHIVO_DATOS);
-            if (datosSistema.getListaClientes().isEmpty()) {
-                precargarDatosDePrueba();
-                ManagerPersistencia.guardarDatos(datosSistema, ARCHIVO_DATOS);
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/gimnasio/gympos/view/MainView.fxml"));
+        
+        loader.setControllerFactory(tipoControlador -> {
+            if (tipoControlador == ClientesController.class) {
+                return new ClientesController(clienteService);
+            } else {
+                try {
+                    return tipoControlador.getDeclaredConstructor().newInstance();
+                } catch (Exception e) {
+                    throw new RuntimeException("Fallo al instanciar controlador por defecto", e);
+                }
             }
-        } catch (Exception e) {
-            datosSistema = new GimnasioData();
-        }
+        });
 
-        Parent root = FXMLLoader.load(getClass().getResource("/com/gimnasio/gympos/view/MainView.fxml"));
-        primaryStage.setTitle("GymPOS - Sistema de Control");
-        primaryStage.setScene(new Scene(root, 1020, 650));
+        Parent root = loader.load();
+        primaryStage.setTitle("GymPOS - Gestión de Clientes");
+        primaryStage.setScene(new Scene(root));
         primaryStage.show();
     }
 
-    private void precargarDatosDePrueba() {
-        for (int i = 1; i <= 25; i++) {
-            Membresia mem = (i % 2 == 0) 
-                ? new MembresiaAnual("M-ANUAL-" + i, LocalDate.now(), 450.0)
-                : new MembresiaMensual("M-MENSUAL-" + i, LocalDate.now(), 500.0);
-            
-            Cliente cliente = new Cliente("ID-" + i, "Cliente de Prueba " + i, "81100022" + i, mem);
-            datosSistema.getListaClientes().add(cliente);
+    @Override
+    public void stop() {
+        if (clienteService != null) {
+            clienteService.apagarServicio();
         }
+    }
+
+    public static void main(String[] args) {
+        launch(args);
     }
 }
