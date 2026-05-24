@@ -3,6 +3,7 @@ package com.gimnasio.gympos.view;
 import com.gimnasio.gympos.controller.ClientesController;
 import com.gimnasio.gympos.model.Cliente;
 import com.gimnasio.gympos.model.ClaseGrupal;
+import com.gimnasio.gympos.model.Reserva;
 import com.gimnasio.gympos.service.ClaseService;
 import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
@@ -20,7 +21,7 @@ public class MainViewMock {
         TableColumn<Cliente, String> colNombre = new TableColumn<>("Nombre");
         TableColumn<Cliente, String> colTelefono = new TableColumn<>("Teléfono");
         tablaClientes.getColumns().addAll(colId, colNombre, colTelefono);
-        tablaClientes.setPrefWidth(300);
+        tablaClientes.setPrefWidth(250);
 
         TextField txtId = new TextField(); txtId.setPromptText("ID Cliente");
         TextField txtNombre = new TextField(); txtNombre.setPromptText("Nombre");
@@ -45,10 +46,25 @@ public class MainViewMock {
         colHorario.setCellValueFactory(new PropertyValueFactory<>("horario"));
         colCupo.setCellValueFactory(new PropertyValueFactory<>("lugaresDisponibles"));
         tablaClases.getColumns().addAll(colClaseId, colClaseNom, colHorario, colCupo);
-        tablaClases.setPrefWidth(350);
+        tablaClases.setPrefWidth(320);
+
+        TextField txtClaseId = new TextField(); txtClaseId.setPromptText("ID Clase (Ej: C04)");
+        TextField txtClaseNombre = new TextField(); txtClaseNombre.setPromptText("Nombre de la Clase");
+        TextField txtClaseInstructor = new TextField(); txtClaseInstructor.setPromptText("Instructor");
+        TextField txtClaseHorario = new TextField(); txtClaseHorario.setPromptText("Horario");
+        TextField txtClaseCupo = new TextField(); txtClaseCupo.setPromptText("Cupo Máximo");
+
+        Button btnAddClase = new Button("Añadir Clase");
+        Button btnEditClase = new Button("Modificar Clase");
+        Button btnDelClase = new Button("Eliminar Clase");
 
         Button btnReservarClase = new Button("Reservar Cupo en Clase");
         btnReservarClase.setStyle("-fx-background-color: #2ecc71; -fx-text-fill: white; -fx-font-weight: bold;");
+
+        ListView<String> listaInscritos = new ListView<>();
+        listaInscritos.setPrefHeight(150);
+        Button btnBajaCliente = new Button("Dar de Baja Alumno");
+        btnBajaCliente.setStyle("-fx-background-color: #e74c3c; -fx-text-fill: white;");
 
         try {
             java.lang.reflect.Field[] fields = ClientesController.class.getDeclaredFields();
@@ -77,50 +93,132 @@ public class MainViewMock {
             e.printStackTrace();
         }
 
-        btnRegistrar.setOnAction(e -> { execMeth(controller, "manejarRegistrar"); });
-        btnActualizar.setOnAction(e -> { execMeth(controller, "manejarActualizar"); });
-        btnEliminar.setOnAction(e -> { execMeth(controller, "manejarEliminar"); });
-        btnBuscar.setOnAction(e -> { execMeth(controller, "manejarBuscar"); });
-        btnLimpiar.setOnAction(e -> { execMeth(controller, "manejarLimpiar"); });
-        btnAcumularPuntos.setOnAction(e -> { execMeth(controller, "manejarAcumularPuntos"); });
-
         final ClaseService finalClaseService = claseServiceInstancia;
+
+        tablaClases.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+            if (newSelection != null) {
+                txtClaseId.setText(newSelection.getIdClase());
+                txtClaseNombre.setText(newSelection.getNombre());
+                txtClaseInstructor.setText(newSelection.getEntrenador());
+                txtClaseHorario.setText(newSelection.getHorario());
+                txtClaseCupo.setText(String.valueOf(newSelection.getCupoMaximo()));
+                listaInscritos.setItems(FXCollections.observableArrayList(newSelection.getIdsClientesInscritos()));
+            }
+        });
+
+        btnRegistrar.setOnAction(e -> execMeth(controller, "manejarRegistrar"));
+        btnActualizar.setOnAction(e -> execMeth(controller, "manejarActualizar"));
+        
+        btnEliminar.setOnAction(e -> {
+            String idEliminado = txtId.getText();
+            
+            execMeth(controller, "manejarEliminar");
+            
+            if (finalClaseService != null && idEliminado != null && !idEliminado.trim().isEmpty()) {
+                finalClaseService.limpiarInscripcionesPorClienteEliminado(idEliminado);
+                
+                tablaClases.setItems(javafx.collections.FXCollections.observableArrayList(finalClaseService.obtenerTodasLasClases()));
+                tablaClases.refresh();
+                
+                ClaseGrupal claseSeleccionada = tablaClases.getSelectionModel().getSelectedItem();
+                if (claseSeleccionada != null) {
+                    listaInscritos.setItems(javafx.collections.FXCollections.observableArrayList(claseSeleccionada.getIdsClientesInscritos()));
+                } else {
+                    listaInscritos.getItems().clear();
+                }
+            }
+        });
+        
+        btnBuscar.setOnAction(e -> execMeth(controller, "manejarBuscar"));
+        btnLimpiar.setOnAction(e -> execMeth(controller, "manejarLimpiar"));
+        btnAcumularPuntos.setOnAction(e -> execMeth(controller, "manejarAcumularPuntos"));
+
+        btnAddClase.setOnAction(e -> {
+            try {
+                ClaseGrupal nc = new ClaseGrupal(txtClaseId.getText(), txtClaseNombre.getText(), txtClaseInstructor.getText(), txtClaseHorario.getText(), Integer.parseInt(txtClaseCupo.getText()));
+                finalClaseService.crearClaseGrupal(nc);
+                tablaClases.setItems(FXCollections.observableArrayList(finalClaseService.obtenerTodasLasClases()));
+            } catch (Exception ex) {
+                new Alert(Alert.AlertType.ERROR, "Datos inválidos: " + ex.getMessage()).showAndWait();
+            }
+        });
+
+        btnEditClase.setOnAction(e -> {
+            try {
+                ClaseGrupal ce = new ClaseGrupal(txtClaseId.getText(), txtClaseNombre.getText(), txtClaseInstructor.getText(), txtClaseHorario.getText(), Integer.parseInt(txtClaseCupo.getText()));
+                ClaseGrupal original = tablaClases.getSelectionModel().getSelectedItem();
+                if (original != null) {
+                    for (String id : original.getIdsClientesInscritos()) {
+                        ce.inscribirCliente(id);
+                    }
+                }
+                finalClaseService.actualizarClaseGrupal(ce);
+                tablaClases.setItems(FXCollections.observableArrayList(finalClaseService.obtenerTodasLasClases()));
+                tablaClases.refresh();
+            } catch (Exception ex) {
+                new Alert(Alert.AlertType.ERROR, ex.getMessage()).showAndWait();
+            }
+        });
+
+        btnDelClase.setOnAction(e -> {
+            finalClaseService.eliminarClaseGrupal(txtClaseId.getText());
+            tablaClases.setItems(FXCollections.observableArrayList(finalClaseService.obtenerTodasLasClases()));
+            listaInscritos.getItems().clear();
+        });
+
         btnReservarClase.setOnAction(e -> {
             Cliente socioSeleccionado = tablaClientes.getSelectionModel().getSelectedItem();
             ClaseGrupal claseSeleccionada = tablaClases.getSelectionModel().getSelectedItem();
-
             if (socioSeleccionado == null || claseSeleccionada == null) {
-                Alert alert = new Alert(Alert.AlertType.WARNING, "Por favor, selecciona un Socio de la lista Y una Clase Grupal.");
-                alert.showAndWait();
+                new Alert(Alert.AlertType.WARNING, "Selecciona un Socio Y una Clase Grupal.").showAndWait();
                 return;
             }
-
             try {
                 finalClaseService.agendarReserva(socioSeleccionado, claseSeleccionada.getIdClase());
                 tablaClases.setItems(FXCollections.observableArrayList(finalClaseService.obtenerTodasLasClases()));
                 tablaClases.refresh();
-                
-                Alert alert = new Alert(Alert.AlertType.INFORMATION, "¡Reserva Exitosa! Cupo asegurado para " + socioSeleccionado.getNombre());
-                alert.showAndWait();
+                listaInscritos.setItems(FXCollections.observableArrayList(claseSeleccionada.getIdsClientesInscritos()));
             } catch (Exception ex) {
-                Alert alert = new Alert(Alert.AlertType.ERROR, ex.getMessage());
-                alert.showAndWait();
+                new Alert(Alert.AlertType.ERROR, ex.getMessage()).showAndWait();
             }
+        });
+
+        btnBajaCliente.setOnAction(e -> {
+            ClaseGrupal claseSeleccionada = tablaClases.getSelectionModel().getSelectedItem();
+            String idClienteSeleccionado = listaInscritos.getSelectionModel().getSelectedItem();
+            if (claseSeleccionada == null || idClienteSeleccionado == null) {
+                new Alert(Alert.AlertType.WARNING, "Selecciona una clase y un alumno inscrito.").showAndWait();
+                return;
+            }
+            
+            for (Reserva r : finalClaseService.obtenerTodasLasReservas()) {
+                if (r.getIdClase().equals(claseSeleccionada.getIdClase()) && r.getIdCliente().equals(idClienteSeleccionado)) {
+                    finalClaseService.cancelarReserva(r.getIdReserva());
+                    break;
+                }
+            }
+            
+            tablaClases.setItems(FXCollections.observableArrayList(finalClaseService.obtenerTodasLasClases()));
+            tablaClases.refresh();
+            listaInscritos.setItems(FXCollections.observableArrayList(claseSeleccionada.getIdsClientesInscritos()));
         });
 
         controller.initialize(null, null);
 
-        VBox panelFormulario = new VBox(10, new Label("Datos del Cliente"), txtId, txtNombre, txtTelefono, new HBox(5, btnRegistrar, btnActualizar, btnEliminar, btnLimpiar));
-        VBox panelBusqueda = new VBox(10, new Label("Búsqueda y Puntos"), txtBuscarId, new HBox(5, btnBuscar, btnAcumularPuntos));
-        VBox panelAccionesClientes = new VBox(20, panelFormulario, panelBusqueda);
-        panelAccionesClientes.setPadding(new Insets(10));
+        VBox formClientes = new VBox(5, new Label("Socio: ID, Nombre, Tel"), txtId, txtNombre, txtTelefono, new HBox(3, btnRegistrar, btnActualizar, btnEliminar, btnLimpiar), txtBuscarId, new HBox(3, btnBuscar, btnAcumularPuntos));
+        VBox panelClientes = new VBox(10, new Label("Socios"), tablaClientes, formClientes);
+        panelClientes.setPadding(new Insets(5));
 
-        VBox panelIzquierdo = new VBox(10, new Label("Socios del Gimnasio"), tablaClientes);
-        VBox panelCentralClases = new VBox(10, new Label("Clases Grupales Disponibles"), tablaClases, btnReservarClase);
-        panelCentralClases.setPadding(new Insets(0, 0, 0, 15));
+        VBox formClases = new VBox(5, new Label("Clase: ID, Nombre, Instructor, Horario, Cupo"), txtClaseId, txtClaseNombre, txtClaseInstructor, txtClaseHorario, txtClaseCupo, new HBox(5, btnAddClase, btnEditClase, btnDelClase));
+        VBox panelClases = new VBox(10, new Label("Clases Disponibles"), tablaClases, formClases);
+        panelClases.setPadding(new Insets(5));
 
-        HBox raiz = new HBox(15, panelIzquierdo, panelCentralClases, panelAccionesClientes);
-        raiz.setPadding(new Insets(15));
+        VBox panelInscritos = new VBox(10, new Label("Alumnos en la Clase Seleccionada"), listaInscritos, btnBajaCliente, btnReservarClase);
+        panelInscritos.setPadding(new Insets(5));
+        panelInscritos.setPrefWidth(240);
+
+        HBox raiz = new HBox(15, panelClientes, panelClases, panelInscritos);
+        raiz.setPadding(new Insets(10));
         return raiz;
     }
 

@@ -131,4 +131,49 @@ public class ClaseService {
             hilosPersistencia.shutdownNow();
         }
     }
+    
+    public void crearClaseGrupal(ClaseGrupal nuevaClase) {
+        if (nuevaClase == null || nuevaClase.getIdClase() == null || nuevaClase.getIdClase().trim().isEmpty()) {
+            throw new IllegalArgumentException("La clase o su ID no pueden estar vacíos.");
+        }
+    clases.put(nuevaClase.getIdClase(), nuevaClase);
+    hilosPersistencia.execute(this::guardarDatosEnDisco);
+    }
+
+    public void actualizarClaseGrupal(ClaseGrupal claseEditada) {
+        if (claseEditada == null || !clases.containsKey(claseEditada.getIdClase())) {
+            throw new IllegalArgumentException("La clase especificada no existe.");
+        }
+
+        ClaseGrupal claseOriginal = clases.get(claseEditada.getIdClase());
+
+        if (claseEditada.getCupoMaximo() < claseOriginal.getIdsClientesInscritos().size()) {
+            throw new IllegalArgumentException("No se puede reducir el cupo a " + claseEditada.getCupoMaximo() 
+                + " porque ya hay " + claseOriginal.getIdsClientesInscritos().size() + " alumnos inscritos.");
+        }
+
+        clases.put(claseEditada.getIdClase(), claseEditada);
+        hilosPersistencia.execute(this::guardarDatosEnDisco);
+    }
+
+    public void eliminarClaseGrupal(String idClase) {
+        clases.remove(idClase);
+        reservas.values().removeIf(reserva -> reserva.getIdClase().equals(idClase));
+        hilosPersistencia.execute(this::guardarDatosEnDisco);
+    }
+    
+    public void limpiarInscripcionesPorClienteEliminado(String idCliente) {
+        if (idCliente == null || idCliente.trim().isEmpty()) return;
+
+        for (ClaseGrupal clase : clases.values()) {
+            synchronized (clase) {
+                if (clase.getIdsClientesInscritos().contains(idCliente)) {
+                    clase.deDarBajaCliente(idCliente);
+                }
+            }
+        }
+
+        reservas.values().removeIf(reserva -> reserva.getIdCliente().equals(idCliente));
+        hilosPersistencia.execute(this::guardarDatosEnDisco);
+    }
 }

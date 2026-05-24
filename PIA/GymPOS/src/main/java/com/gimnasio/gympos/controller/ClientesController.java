@@ -153,6 +153,10 @@ public class ClientesController implements Initializable {
         } catch (ClienteNoEncontradoException e) {
             mostrarAlerta(Alert.AlertType.ERROR, "Error al eliminar", e.getMessage());
         }
+        
+        String idClienteEliminar = txtId.getText();
+        clienteService.eliminarCliente(idClienteEliminar);
+        claseService.limpiarInscripcionesPorClienteEliminado(idClienteEliminar);
     }
 
     @FXML
