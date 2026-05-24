@@ -10,11 +10,21 @@ public class Cliente implements Serializable {
     private String telefono;
     private Membresia membresia;
 
-    public Cliente(String idCliente, String nombre, String telefono, Membresia membresia) {
+    public Cliente(String idCliente, String nombre, String telefono, com.gimnasio.gympos.model.Membresia membresia) {
         this.idCliente = idCliente;
         this.nombre = nombre;
         this.telefono = telefono;
-        this.membresia = membresia;
+        /*this.membresia = membresia;*/
+        if (membresia == null) {
+        this.membresia = new com.gimnasio.gympos.model.MembresiaVIP(
+            "VIP-DEFAULT", 
+            java.time.LocalDate.now().plusMonths(1), 
+            499.00, 
+            100
+            );
+        } else {
+            this.membresia = membresia;
+        }
     }
 
     public double obtenerCostoDeRenovacion() {

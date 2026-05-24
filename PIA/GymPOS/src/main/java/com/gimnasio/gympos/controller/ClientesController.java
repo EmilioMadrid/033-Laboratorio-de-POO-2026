@@ -5,6 +5,7 @@ import com.gimnasio.gympos.model.MembresiaVIP;
 import com.gimnasio.gympos.service.ClienteService;
 import com.gimnasio.gympos.exception.ClienteDuplicadoException;
 import com.gimnasio.gympos.exception.ClienteNoEncontradoException;
+import com.gimnasio.gympos.service.ClaseService;
 
 import java.net.URL;
 import java.util.Collection;
@@ -54,10 +55,16 @@ public class ClientesController implements Initializable {
     private Button btnAcumularPuntos;
 
     private final ClienteService clienteService;
+    private final ClaseService claseService;
     private final ObservableList<Cliente> datosTabla = FXCollections.observableArrayList();
 
-    public ClientesController(ClienteService clienteService) {
+    public ClientesController(ClienteService clienteService, ClaseService claseService) {
         this.clienteService = clienteService;
+        this.claseService = claseService;
+    }
+
+    public ClientesController(ClienteService clienteService) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override

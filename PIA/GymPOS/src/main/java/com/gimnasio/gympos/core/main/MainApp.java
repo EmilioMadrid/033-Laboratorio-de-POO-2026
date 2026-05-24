@@ -2,6 +2,7 @@ package com.gimnasio.gympos.core.main;
 
 import com.gimnasio.gympos.controller.ClientesController;
 import com.gimnasio.gympos.service.ClienteService;
+import com.gimnasio.gympos.service.ClaseService;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -11,31 +12,24 @@ import javafx.stage.Stage;
 public class MainApp extends Application {
 
     private ClienteService clienteService;
+    private ClaseService claseService;
 
     @Override
     public void init() {
         clienteService = new ClienteService("gimnasio_datos.dat");
+        claseService = new ClaseService();
     }
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/gimnasio/gympos/view/MainView.fxml"));
-        
-        loader.setControllerFactory(tipoControlador -> {
-            if (tipoControlador == ClientesController.class) {
-                return new ClientesController(clienteService);
-            } else {
-                try {
-                    return tipoControlador.getDeclaredConstructor().newInstance();
-                } catch (Exception e) {
-                    throw new RuntimeException("Fallo al instanciar controlador por defecto", e);
-                }
-            }
-        });
+        ClientesController controller = new ClientesController(clienteService, claseService);
 
-        Parent root = loader.load();
-        primaryStage.setTitle("GymPOS - Gestión de Clientes");
-        primaryStage.setScene(new Scene(root));
+        javafx.scene.Scene scene = new javafx.scene.Scene(
+            com.gimnasio.gympos.view.MainViewMock.crearVista(controller), 1000, 500
+        );
+        
+        primaryStage.setTitle("GymPOS - Gestión de Clientes y Reservas (Modo Prueba)");
+        primaryStage.setScene(scene);
         primaryStage.show();
     }
 

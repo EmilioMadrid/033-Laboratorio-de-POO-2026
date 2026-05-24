@@ -25,9 +25,9 @@ public class ClaseService {
     }
 
     private void cargarDatosInicialesDemo() {
-        clases.put("C1", new ClaseGrupal("C1", "Spinning Intenso", "Entrenador Alan", "08:00 AM", 2));
-        clases.put("C2", new ClaseGrupal("C2", "Yoga Restaurativo", "Entrenadora Sofia", "10:00 AM", 15));
-        clases.put("C3", new ClaseGrupal("C3", "Crossfit Pro", "Entrenador Carlos", "07:00 PM", 1));
+        clases.put("C01", new ClaseGrupal("C01", "Spinning", "Entrenador Alan", "08:00 AM", 2));
+        clases.put("C02", new ClaseGrupal("C02", "Yoga", "Entrenadora Sofia", "10:00 AM", 15));
+        clases.put("C03", new ClaseGrupal("C03", "Crossfit", "Entrenador Carlos", "07:00 PM", 1));
     }
 
     public List<ClaseGrupal> obtenerTodasLasClases() {
