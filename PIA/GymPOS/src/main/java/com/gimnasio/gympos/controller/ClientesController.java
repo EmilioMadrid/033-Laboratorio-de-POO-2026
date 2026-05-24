@@ -61,7 +61,7 @@ public class ClientesController implements Initializable {
     }
 
     @Override
-    public void initialize(URL location, ResourceBundle resources) {
+    public void initialize(java.net.URL location, java.util.ResourceBundle resources) {
         colId.setCellValueFactory(new PropertyValueFactory<>("idCliente"));
         colNombre.setCellValueFactory(new PropertyValueFactory<>("nombre"));
         colTelefono.setCellValueFactory(new PropertyValueFactory<>("telefono"));
