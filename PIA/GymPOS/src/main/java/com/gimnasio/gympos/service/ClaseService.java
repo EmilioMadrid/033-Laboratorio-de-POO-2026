@@ -61,9 +61,9 @@ public class ClaseService {
     }
 
     private void cargarDatosInicialesDemo() {
-        clases.put("C01", new ClaseGrupal("C01", "Spinning Intenso", "Entrenador Alan", "08:00 AM", 2));
-        clases.put("C02", new ClaseGrupal("C02", "Yoga Restaurativo", "Entrenadora Sofia", "10:00 AM", 15));
-        clases.put("C03", new ClaseGrupal("C03", "Crossfit Pro", "Entrenador Carlos", "07:00 PM", 1));
+        clases.put("C01", new ClaseGrupal("C01", "Spinning", "Entrenador Alan", "08:00 AM", 2));
+        clases.put("C02", new ClaseGrupal("C02", "Yoga", "Entrenadora Sofia", "10:00 AM", 15));
+        clases.put("C03", new ClaseGrupal("C03", "Crossfit", "Entrenador Carlos", "07:00 PM", 1));
     }
 
     public List<ClaseGrupal> obtenerTodasLasClases() {
@@ -136,13 +136,22 @@ public class ClaseService {
         if (nuevaClase == null || nuevaClase.getIdClase() == null || nuevaClase.getIdClase().trim().isEmpty()) {
             throw new IllegalArgumentException("La clase o su ID no pueden estar vacíos.");
         }
-    clases.put(nuevaClase.getIdClase(), nuevaClase);
-    hilosPersistencia.execute(this::guardarDatosEnDisco);
+
+        if (nuevaClase.getCupoMaximo() <= 0) {
+            throw new IllegalArgumentException("Operación inválida: El cupo máximo debe ser mayor a cero.");
+        }
+
+        clases.put(nuevaClase.getIdClase(), nuevaClase);
+        hilosPersistencia.execute(this::guardarDatosEnDisco);
     }
 
     public void actualizarClaseGrupal(ClaseGrupal claseEditada) {
         if (claseEditada == null || !clases.containsKey(claseEditada.getIdClase())) {
             throw new IllegalArgumentException("La clase especificada no existe.");
+        }
+
+        if (claseEditada.getCupoMaximo() <= 0) {
+            throw new IllegalArgumentException("Operación inválida: El cupo máximo debe ser mayor a cero.");
         }
 
         ClaseGrupal claseOriginal = clases.get(claseEditada.getIdClase());

@@ -3,6 +3,7 @@ package com.gimnasio.gympos.core.main;
 import com.gimnasio.gympos.controller.ClientesController;
 import com.gimnasio.gympos.service.ClienteService;
 import com.gimnasio.gympos.service.ClaseService;
+import com.gimnasio.gympos.service.InventarioService;
 import com.gimnasio.gympos.view.MainViewMock;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -12,11 +13,13 @@ public class AppPrueba extends Application {
 
     private ClienteService clienteService;
     private ClaseService claseService;
+    private InventarioService inventarioService;
 
     @Override
     public void init() {
         clienteService = new ClienteService("gimnasio_test.dat");
         claseService = new ClaseService();
+        inventarioService = new InventarioService();
     }
 
     @Override
@@ -37,6 +40,9 @@ public class AppPrueba extends Application {
         }
         if (claseService != null) {
             claseService.apagarServicio();
+        }
+        if (inventarioService != null) {
+            inventarioService.apagarServicio();
         }
     }
 

@@ -3,6 +3,7 @@ package com.gimnasio.gympos.core.main;
 import com.gimnasio.gympos.controller.ClientesController;
 import com.gimnasio.gympos.service.ClienteService;
 import com.gimnasio.gympos.service.ClaseService;
+import com.gimnasio.gympos.service.InventarioService;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -13,11 +14,13 @@ public class MainApp extends Application {
 
     private ClienteService clienteService;
     private ClaseService claseService;
+    private InventarioService inventarioService;
 
     @Override
     public void init() {
         clienteService = new ClienteService("gimnasio_datos.dat");
         claseService = new ClaseService();
+        inventarioService = new InventarioService();
     }
 
     @Override
@@ -40,6 +43,9 @@ public class MainApp extends Application {
         }
         if (claseService != null) {
             claseService.apagarServicio();
+        }
+        if (inventarioService != null) {
+            inventarioService.apagarServicio();
         }
     }
 
